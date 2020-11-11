@@ -10,13 +10,14 @@ import os
 load_dotenv()
 
 #lookup
-myclient = pymongo.MongoClient(os.getenv("MONGO_URI"))
-mydb = myclient["fart"]
-mycol = mydb["hello wrold"]
-
+mongoClient = pymongo.MongoClient(os.getenv("MONGO_URI"))
+collection = mongoClient["testing"]["users"]
 
 #client
-client = commands.Bot(command_prefix = "!")
+client = commands.Bot(command_prefix = os.getenv("PREFIX"))
+
+#owners
+owners = ["272476770127708160", "659140496895115287"]
 
 #events
 @client.event
@@ -26,11 +27,20 @@ async def on_ready():
 #commands
 @client.command()
 async def lookup(ctx, *, username):
-    x = mycol.find_one({ "name": str(username)})
-    embed = discord.Embed(color=0xff0059)
-    embed.add_field(name="Username", value=x["name"], inline=False)
-    embed.add_field(name="Key", value=f"||{x['key']}||", inline=False)
-    await ctx.message.author.send(embed=embed)
+  if str(ctx.message.author.id) in owners:
+    x = collection.find_one({ "username": str(username)})
+    if x != None: 
+      embed = discord.Embed(color=0xff0059)
+      embed.title = "User Lookup"
+      embed.add_field(name="Username", value=x["username"])
+      embed.add_field(name="Key", value=f"||{x['key']}||")
+      embed.add_field(name="Invited By", value=x["invitedBy"])
+      await ctx.send("check your dms")
+      await ctx.message.author.send(embed=embed)
+    else:
+      await ctx.send("invalid user")
+  else:
+    await ctx.send("no perms")
 
 #running
 client.run(os.getenv("BOT_TOKEN"))
