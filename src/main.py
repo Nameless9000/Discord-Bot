@@ -35,6 +35,7 @@ async def lookup(ctx, *, username):
       embed.add_field(name="Username", value=x["username"])
       embed.add_field(name="Key", value=f"||{x['key']}||")
       embed.add_field(name="Invited By", value=x["invitedBy"])
+      embed.add_field(name="Uploads", value=x["uploads"])
       await ctx.send("check your dms")
       await ctx.message.author.send(embed=embed)
     else:
