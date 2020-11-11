@@ -1,0 +1,33 @@
+#imports
+from dotenv import load_dotenv
+import pymongo
+import discord
+from discord.ext import commands
+import json
+import os
+
+#env
+load_dotenv()
+
+#lookup
+myclient = pymongo.MongoClient(os.getenv("MONGO_URI"))
+mydb = myclient["fart"]
+mycol = mydb["hello wrold"]
+
+
+#client
+client = commands.Bot(command_prefix = "!")
+
+#events
+@client.event
+async def on_ready():
+    print("ready")
+
+#commands
+@client.command()
+async def lookup(ctx, *, username):
+    x = mycol.find_one({}, { "name": str(username)})
+    print(x["_id"])
+
+#running
+client.run(os.getenv("BOT_TOKEN"))
