@@ -26,8 +26,11 @@ async def on_ready():
 #commands
 @client.command()
 async def lookup(ctx, *, username):
-    x = mycol.find_one({}, { "name": str(username)})
-    print(x["_id"])
+    x = mycol.find_one({ "name": str(username)})
+    embed = discord.Embed(color=0xff0059)
+    embed.add_field(name="Username", value=x["name"], inline=False)
+    embed.add_field(name="Key", value=f"||{x['key']}||", inline=False)
+    await ctx.message.author.send(embed=embed)
 
 #running
 client.run(os.getenv("BOT_TOKEN"))
