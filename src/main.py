@@ -11,7 +11,7 @@ load_dotenv()
 
 #lookup
 mongoClient = pymongo.MongoClient(os.getenv("MONGO_URI"))
-collection = mongoClient["testing"]["users"]
+collection = mongoClient["astral"]["users"]
 
 #client
 client = commands.Bot(command_prefix = os.getenv("PREFIX"))
@@ -35,13 +35,18 @@ async def lookup(ctx, *, username):
       embed.add_field(name="Username", value=x["username"])
       embed.add_field(name="Key", value=f"||{x['key']}||")
       embed.add_field(name="Invited By", value=x["invitedBy"])
+      embed.add_field(name="Blacklisted", value=x["blacklisted"]["status"])
+      embed.add_field(name="Invite", value=f"||{x['invite']}||")
+      embed.add_field(name="Registration Date", value=x["registrationDate"])
       embed.add_field(name="Uploads", value=x["uploads"])
-      await ctx.send("check your dms")
+      embed.add_field(name="Domain", value=x["domain"]["subdomain"] + "." + x["settings"]["domain"]["name"] if x["settings"]["domain"]["subdomain"] != None and x["settings"]["domain"]["subdomain"] != "" else x["settings"]["domain"]["name"])
+      embed.add_field(name="Admin", value=True if "admin" in x["roles"] else False)
+      await ctx.send("check your dms") if str(ctx.message.channel.type) == "text" else None
       await ctx.message.author.send(embed=embed)
     else:
       await ctx.send("invalid user")
   else:
-    await ctx.send("no perms")
+    await ctx.send("u no have perms")
 
 #running
 client.run(os.getenv("BOT_TOKEN"))
