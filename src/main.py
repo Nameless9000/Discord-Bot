@@ -11,7 +11,7 @@ load_dotenv()
 
 #lookup
 mongoClient = pymongo.MongoClient(os.getenv("MONGO_URI"))
-collection = mongoClient["astral"]["users"]
+collection = mongoClient["fart"]["hello wrold"]
 
 #client
 client = commands.Bot(command_prefix = os.getenv("PREFIX"))
@@ -46,13 +46,14 @@ async def lookup(ctx, *, username):
     else:
       await ctx.send("invalid user") 
   else:
-    await ctx.send("u no have perms")
+    await ctx.send("you no have perms")
 
 @client.command()
 async def blacklist(ctx, *, username):
   if str(ctx.message.author.id) in owners:
-    x = collection.find_one_and_delete({ "username": str(username)})
+    x = collection.find_one({ "username": str(username)})
     if x != None:
+      x["blacklisted"]["status"] = True
       embed = discord.Embed(color=0xff0059)
       embed.title = "Blacklist"
       embed.add_field(name="Success", value=f"Successfully blacklisted {username}.")
@@ -63,10 +64,22 @@ async def blacklist(ctx, *, username):
     await ctx.send("you have no perms")
 
 @client.command()
-async def giveinvites(ctx, amount, *, member):
+async def giveinvites(ctx, amount, *, username):
   if str(ctx.message.author.id) in owners:
-    for x in collection.find():
-      
+    print(username)
+    if str(username) == "everyone":
+      for x in collection.find():
+        x["invites"] = x["invites"] + int(amount)
+    else:
+      x = collection.find_one({ "username": str(username)})
+      if x != None:
+        x["invites"] += int(amount)
+        await ctx.send(f"given {username} {amount} invite(s)")
+      else:
+        await ctx.send("invalid user")
+  else:
+    await ctx.send("you have no perms")
+
 
 #running
 client.run(os.getenv("BOT_TOKEN"))
