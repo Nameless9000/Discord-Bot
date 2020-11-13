@@ -48,5 +48,19 @@ async def lookup(ctx, *, username):
   else:
     await ctx.send("u no have perms")
 
+@client.command()
+async def blacklist(ctx, *, username):
+  if str(ctx.message.author.id) in owners:
+    x = collection.find_one_and_delete({ "username": str(username)})
+    if x != None:
+      embed = discord.Embed(color=0xff0059)
+      embed.title = "Blacklist"
+      embed.add_field(name="Success", value=f"Successfully blacklisted {username}.")
+      await ctx.send(embed=embed) if str(ctx.message.channel.type) == "text" else None
+    else:
+      await ctx.send("invalid user")
+  else:
+    await ctx.send("you have no perms")
+
 #running
 client.run(os.getenv("BOT_TOKEN"))
