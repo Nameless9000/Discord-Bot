@@ -62,5 +62,11 @@ async def blacklist(ctx, *, username):
   else:
     await ctx.send("you have no perms")
 
+@client.command()
+async def giveinvites(ctx, amount, *, member):
+  if str(ctx.message.author.id) in owners:
+    for x in collection.find():
+      
+
 #running
 client.run(os.getenv("BOT_TOKEN"))
