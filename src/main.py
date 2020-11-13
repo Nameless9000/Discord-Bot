@@ -44,7 +44,7 @@ async def lookup(ctx, *, username):
       await ctx.send("check your dms") if str(ctx.message.channel.type) == "text" else None
       await ctx.message.author.send(embed=embed)
     else:
-      await ctx.send("invalid user")
+      await ctx.send("invalid user") 
   else:
     await ctx.send("u no have perms")
 
