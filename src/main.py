@@ -53,7 +53,9 @@ async def blacklist(ctx, *, username):
   if str(ctx.message.author.id) in owners:
     x = collection.find_one({ "username": str(username)})
     if x != None:
-      x["blacklisted"]["status"] = True
+      oldquerey = {"blacklisted": { "status": True}}
+      newquerey = { "$set" : "blacklisted": { "status": True}}}
+      x.update_one()
       embed = discord.Embed(color=0xff0059)
       embed.title = "Blacklist"
       embed.add_field(name="Success", value=f"Successfully blacklisted {username}.")
