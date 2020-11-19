@@ -24,6 +24,14 @@ owners = ["272476770127708160", "659140496895115287"]
 async def on_ready():
     print("ready")
 
+@client.event
+async def on_message(message):
+  if message.channel.id == 773023826292375592:
+    emoji = "<:upvote:779040968875835392>"
+    await message.add_reaction(emoji)
+    emoji = "<:9975_downvote:779040968816066620>"
+    await message.add_reaction(emoji)
+
 #commands
 @client.command()
 async def lookup(ctx, *, username):
