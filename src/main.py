@@ -83,7 +83,8 @@ async def giveinvites(ctx, amount, *, username):
     else:
       x = collection.find_one({ "username": str(username)})
       if x != None:
-        x["invites"] += int(amount)
+        invites = x["invites"]
+        collection.find_one_and_update({ "username": str(username)}, { "$set": { "invites": invites + int(amount)}})
         await ctx.send(f"given {username} {amount} invite(s)")
       else:
         await ctx.send("invalid user")
