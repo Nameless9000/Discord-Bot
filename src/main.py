@@ -79,7 +79,8 @@ async def giveinvites(ctx, amount, *, username):
     print(username)
     if str(username) == "everyone":
       for x in collection.find():
-        x["invites"] = x["invites"] + int(amount)
+        invites = x["invites"]
+        collection.find_one_and_update({ "invites": invites + int(amount)})
     else:
       x = collection.find_one({ "username": str(username)})
       if x != None:
