@@ -22,7 +22,7 @@ owners = ["272476770127708160", "659140496895115287"]
 #events
 @client.event
 async def on_ready():
-    print("ready")
+  print("ready")
 
 @client.event
 async def on_message(message):
