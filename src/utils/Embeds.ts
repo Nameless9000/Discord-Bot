@@ -21,6 +21,7 @@ class Embed {
             description: null,
             color: colors.default,
             fields: [],
+            url: null,
         };
     }
 
@@ -30,6 +31,16 @@ class Embed {
      */
     setTitle(title: string) {
         this.embed.title = title;
+
+        return this;
+    }
+
+    /**
+     * Set the embed url.
+     * @param {string} url The embed url.
+     */
+    setUrl(url: string) {
+        this.embed.url = url;
 
         return this;
     }

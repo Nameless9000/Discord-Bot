@@ -19,7 +19,7 @@ export default class API {
      */
     async request(data: { endpoint: string, method: Method, body?: object }) {
         try {
-            const BASE_URL = 'https://api2.astral.cool';
+            const BASE_URL = process.env.BACKEND_URL;
 
             const res = await Axios({
                 url: `${BASE_URL}${data.endpoint}`,
@@ -34,7 +34,11 @@ export default class API {
 
             return res.data;
         } catch (err) {
-            throw new Error(err.response.data.error);
+            err = err.response.data.error;
+
+            throw new Error(
+                `${err.charAt(0).toUpperCase() + err.slice(1)}.`
+            );
         }
     }
 
@@ -63,5 +67,42 @@ export default class API {
             totalUsers,
             totalFiles,
         };
+    }
+
+    /**
+     * Generate an invite code.
+     */
+    async generateInvite() {
+        return await this.request({
+            endpoint: '/admin/invites',
+            method: 'POST',
+        });
+    }
+
+    /**
+     *
+     * @param {string} id The user's identifier.
+     * @param {string} reason The reason for the blacklist.
+     */
+    async blacklist(id: string, reason: string) {
+        return await this.request({
+            endpoint: '/admin/blacklist',
+            method: 'POST',
+            body: {
+                id,
+                reason: reason ? reason : 'No reason provided',
+            },
+        });
+    }
+
+    /**
+     * Get a user.
+     * @param {string} id The user's identifier.
+     */
+    async getUser(id: string) {
+        return await this.request({
+            endpoint: `/admin/users/${id}`,
+            method: 'GET',
+        });
     }
 }

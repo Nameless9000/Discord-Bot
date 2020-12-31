@@ -24,4 +24,9 @@ export interface EmbedInterface {
      * The embed fields, if any.
      */
     fields?: Array<{ name: string, value: string, inline?: boolean }>;
+
+    /**
+     * The embed url.
+     */
+    url?: string;
 }

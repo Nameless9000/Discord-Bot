@@ -6,6 +6,10 @@ try {
     const requiredEnvs = [
         'BOT_TOKEN',
         'API_KEY',
+        'PREFIX',
+        'BACKEND_URL',
+        'OWNERS',
+        'BOOSTER_ROLE',
     ];
 
     for (const env of requiredEnvs) {

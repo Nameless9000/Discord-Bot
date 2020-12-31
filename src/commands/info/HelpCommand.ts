@@ -19,7 +19,7 @@ export default class HelpCommand extends BaseCommand {
         commands.forEach((cmd) => {
             if (!categories.find((x) => x.name === cmd.category)) categories.push({
                 name: cmd.category,
-                value: `\`${process.env.PREFIX}help <${cmd.category}>\``,
+                value: `\`${process.env.PREFIX}help ${cmd.category}\``,
                 inline: true,
             });
         });
@@ -31,11 +31,13 @@ export default class HelpCommand extends BaseCommand {
         if (category) {
             const categoryCommands = [];
 
-            commands.forEach((cmd) => categoryCommands.push({
-                name: cmd.name,
-                value: `\`${process.env.PREFIX}help <${cmd.name}>\``,
-                inline: true,
-            }));
+            commands.forEach((cmd) => {
+                if (cmd.category === args[0]) categoryCommands.push({
+                    name: cmd.name,
+                    value: `\`${process.env.PREFIX}help ${cmd.name}\``,
+                    inline: true,
+                });
+            });
 
             embed.setTitle(category.name.charAt(0).toUpperCase() + category.name.slice(1))
                 .addFields(categoryCommands);
