@@ -57,13 +57,12 @@ async def lookup(ctx, *, username):
     await ctx.send("you no have perms")
 
 @client.command()
-async def blacklist(ctx, *, username):
+async def blacklist(ctx, username, *, reason):
+  print(username)
   if str(ctx.message.author.id) in owners:
     x = collection.find_one({ "username": str(username)})
     if x != None:
-      querey = { "username": "username"}
-      newquerey = { ""}
-      x.update_one()
+      x = collection.find_one_and_update({"username": str(username)}, { "$set": { "blacklisted": { "status": True, "reason": str(reason) }}})
       embed = discord.Embed(color=0xff0059)
       embed.title = "Blacklist"
       embed.add_field(name="Success", value=f"Successfully blacklisted {username}.")
